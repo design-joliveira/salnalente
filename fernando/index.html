@@ -14,7 +14,6 @@
       --accent: #e8c87a;
     }
 
-    
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -61,7 +60,9 @@
     .gallery {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 20px;
+      padding: 0 32px;
+      align-items: center;
     }
 
     .photo-item {
@@ -69,6 +70,15 @@
       width: 100%;
       cursor: pointer;
       overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      .gallery {
+        padding: 0;
+      }
+      .photo-item {
+        width: 50%;
+      }
     }
 
     .photo-item img {
