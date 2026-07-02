@@ -329,12 +329,12 @@
     gallery.appendChild(item);
   });
   
-  function toggle(item, num) {
-    if (selected.has(num)) {
-      selected.delete(num);
+  function toggle(item, file) {
+    if (selected.has(file)) {
+      selected.delete(file);
       item.classList.remove('selected');
     } else {
-      selected.add(num);
+      selected.add(file);
       item.classList.add('selected');
     }
     update();
@@ -350,8 +350,8 @@
       btnWhatsapp.setAttribute('aria-disabled', 'true');
       hint.style.display = 'block';
     } else {
-      const nums = [...selected].sort().map(n => `#${n}`).join(', ');
-      listEl.textContent = nums;
+      const files = [...selected].sort().join(', ');
+      listEl.textContent = files;
       hint.style.display = 'none';
 
       const msg = `Olá! Quero as seguintes fotos:\n${files}`;
