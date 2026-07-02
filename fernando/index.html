@@ -317,19 +317,18 @@
   let selected = new Set();
 
   // Monta a galeria
-  photos.forEach((file, i) => {
-    const num = String(i + 1).padStart(3, '0');
+ photos.forEach((file) => {
     const item = document.createElement('div');
     item.className = 'photo-item';
-    item.dataset.num = num;
+    item.dataset.file = file;
     item.innerHTML = `
-      <img src="fotos/${file}" alt="Foto ${num}" draggable="false" />
-      <div class="photo-number">#${num}</div>
+      <img src="fotos/${file}" alt="${file}" draggable="false" />
+      <div class="photo-number">${file}</div>
     `;
-    item.addEventListener('click', () => toggle(item, num));
+    item.addEventListener('click', () => toggle(item, file));
     gallery.appendChild(item);
   });
-
+  
   function toggle(item, num) {
     if (selected.has(num)) {
       selected.delete(num);
@@ -355,7 +354,7 @@
       listEl.textContent = nums;
       hint.style.display = 'none';
 
-      const msg = `Olá! Quero as fotos do dia de surf:\n${nums}\n\nNome: ${CLIENT_NAME}`;
+      const msg = `Olá! Quero as seguintes fotos:\n${files}`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       btnWhatsapp.setAttribute('href', url);
       btnWhatsapp.removeAttribute('aria-disabled');
