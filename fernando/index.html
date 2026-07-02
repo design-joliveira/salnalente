@@ -238,26 +238,6 @@
   const WHATSAPP_NUMBER = '5521999485532'; // ← seu número com DDI+DDD, sem espaços
   // ──────────────────────────────────────────────────────────
 
-  // ← liste aqui os nomes exatos dos arquivos que estão na pasta fotos/
-  const photos = [
-  'Small_.jpg',
-  'Small_-2.jpg',
-  'Small_-3.jpg',
-  'Small_-4.jpg',
-  'Small_-5.jpg',
-  'Small_-6.jpg',
-  'Small_-7.jpg',
-  'Small_-8.jpg',
-  'Small_-9.jpg',
-  'Small_-10.jpg',
-  'Small_-11.jpg',
-  'Small_-12.jpg',
-  'Small_-13.jpg',
-  'Small_-14.jpg',
-  'Small_-15.jpg',
-  'Small_-16.jpg',
-  ];
-
   const gallery = document.getElementById('gallery');
   const countEl = document.getElementById('count');
   const listEl  = document.getElementById('selectedList');
@@ -266,13 +246,21 @@
 
   let selected = new Set();
 
-  photos.forEach((file) => {
-    const item = document.createElement('div');
-    item.className = 'photo-item';
-    item.innerHTML = `<img src="fotos/${file}" alt="${file}" draggable="false" />`;
-    item.addEventListener('click', () => toggle(item, file));
-    gallery.appendChild(item);
-  });
+  // Carrega a lista de fotos do arquivo fotos.json
+  fetch('fotos.json')
+    .then(r => r.json())
+    .then(photos => {
+      photos.forEach((file) => {
+        const item = document.createElement('div');
+        item.className = 'photo-item';
+        item.innerHTML = `<img src="fotos/${file}" alt="${file}" draggable="false" />`;
+        item.addEventListener('click', () => toggle(item, file));
+        gallery.appendChild(item);
+      });
+    })
+    .catch(() => {
+      gallery.innerHTML = '<p style="padding:2rem;color:var(--salt)">Nenhuma foto encontrada.</p>';
+    });
 
   function toggle(item, file) {
     if (selected.has(file)) {
