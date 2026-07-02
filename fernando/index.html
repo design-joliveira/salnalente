@@ -3,16 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sal na Lente — Fotos do Zé Luís</title>
+  <title>Sal na Lente</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
 
     :root {
-      --sand: #f0ebe3;
       --ocean: #1a2e3b;
       --foam: #ffffff;
       --salt: #6b7f8a;
-      --wave: #2a7f9e;
       --accent: #e8c87a;
     }
 
@@ -26,11 +24,8 @@
     }
 
     header {
-      padding: 2rem 1.5rem 1.5rem;
+      padding: 1.25rem 1.5rem;
       border-bottom: 1px solid rgba(255,255,255,0.08);
-      display: flex;
-      align-items: center;
-      gap: 1rem;
     }
 
     .logo {
@@ -46,24 +41,11 @@
       font-weight: 700;
     }
 
-    .header-info {
-      margin-left: auto;
-      text-align: right;
-    }
-
-    .client-name {
-      font-size: 0.75rem;
-      color: var(--salt);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-    }
-
     .instruction {
-      padding: 1.5rem;
+      padding: 1rem 1.5rem;
       background: rgba(255,255,255,0.04);
       border-left: 3px solid var(--accent);
-      margin: 1.5rem;
-      border-radius: 0 6px 6px 0;
+      margin: 1rem 0;
       font-size: 0.875rem;
       color: var(--salt);
       line-height: 1.6;
@@ -72,79 +54,55 @@
     .instruction strong {
       color: var(--foam);
       display: block;
-      margin-bottom: 0.25rem;
-      font-size: 0.95rem;
+      margin-bottom: 0.2rem;
     }
 
     .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-      gap: 3px;
-      padding: 0 1.5rem;
-    }
-
-    @media (min-width: 600px) {
-      .gallery {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      }
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     .photo-item {
       position: relative;
-      aspect-ratio: 3/2;
+      width: 100%;
       cursor: pointer;
       overflow: hidden;
-      border-radius: 3px;
     }
 
     .photo-item img {
       width: 100%;
-      height: 100%;
-      object-fit: cover;
+      height: auto;
       display: block;
-      transition: transform 0.3s ease;
-      filter: brightness(0.9);
+      filter: brightness(0.92);
       pointer-events: none;
       user-select: none;
       -webkit-user-drag: none;
+      transition: filter 0.2s ease;
     }
 
     .photo-item:hover img {
-      transform: scale(1.03);
       filter: brightness(1);
     }
 
-    .photo-number {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      background: rgba(0,0,0,0.6);
-      color: #fff;
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 2px 7px;
-      border-radius: 20px;
-      letter-spacing: 0.05em;
+    .photo-item.selected img {
+      filter: brightness(0.55);
     }
 
     .photo-item.selected::after {
       content: '✓';
       position: absolute;
       inset: 0;
-      background: rgba(42, 127, 158, 0.45);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 2.5rem;
+      font-size: 5rem;
       color: #fff;
       font-weight: 700;
+      pointer-events: none;
+      z-index: 3;
     }
 
-    .photo-item.selected img {
-      filter: brightness(0.7);
-    }
-
-    /* Watermark overlay via CSS — harder to bypass than an img tag */
     .photo-item::before {
       content: 'SAL NA LENTE';
       position: absolute;
@@ -153,18 +111,14 @@
       align-items: center;
       justify-content: center;
       font-family: 'Playfair Display', serif;
-      font-size: clamp(1rem, 4vw, 1.6rem);
+      font-size: clamp(1.2rem, 5vw, 2rem);
       font-weight: 700;
-      color: rgba(255,255,255,0.28);
+      color: rgba(255,255,255,0.22);
       letter-spacing: 0.2em;
       pointer-events: none;
       z-index: 2;
       text-shadow: 0 1px 4px rgba(0,0,0,0.4);
       transform: rotate(-20deg);
-    }
-
-    .photo-item.selected::before {
-      z-index: 3;
     }
 
     .sticky-bar {
@@ -176,13 +130,10 @@
       display: flex;
       flex-direction: column;
       gap: 0.75rem;
-      margin-top: 1.5rem;
+      margin-top: 4px;
     }
 
     .selection-summary {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
       font-size: 0.85rem;
       color: var(--salt);
     }
@@ -196,7 +147,7 @@
       font-size: 0.75rem;
       color: var(--accent);
       min-height: 1.2em;
-      letter-spacing: 0.05em;
+      word-break: break-all;
     }
 
     .btn-whatsapp {
@@ -219,11 +170,6 @@
     }
 
     .btn-whatsapp:hover { background: #1ebe5d; }
-    .btn-whatsapp:disabled {
-      background: #1a3a2e;
-      color: #4a7a5a;
-      cursor: not-allowed;
-    }
 
     .btn-whatsapp svg {
       width: 20px;
@@ -242,7 +188,7 @@
       text-align: center;
       padding: 2rem 1.5rem;
       font-size: 0.75rem;
-      color: rgba(107,127,138,0.5);
+      color: rgba(107,127,138,0.4);
       letter-spacing: 0.05em;
     }
   </style>
@@ -251,9 +197,6 @@
 
 <header>
   <div class="logo"><span>Sal</span> na Lente</div>
-  <div class="header-info">
-    <div class="client-name">Suas fotos · Zé Luís</div>
-  </div>
 </header>
 
 <div class="instruction">
@@ -261,9 +204,7 @@
   Toque em cada foto que quiser. Quando terminar, clique em "Enviar seleção" — eu recebo a lista direto no WhatsApp e te mando as fotos em alta resolução após o pagamento.
 </div>
 
-<div class="gallery" id="gallery">
-  <!-- As fotos são carregadas automaticamente da pasta /fotos/ -->
-</div>
+<div class="gallery" id="gallery"></div>
 
 <div class="sticky-bar">
   <div class="selection-summary">
@@ -282,13 +223,11 @@
 <footer>salnalente.com.br</footer>
 
 <script>
-  // ─── CONFIGURAÇÃO ───────────────────────────────────────────
-  const WHATSAPP_NUMBER = '5521999485532'; // ← troque pelo seu número com DDI+DDD, sem espaços ou símbolos
-  const CLIENT_NAME = 'Fernanco';           // ← nome do cliente desta página
-  // ────────────────────────────────────────────────────────────
+  // ─── CONFIGURAÇÃO ─────────────────────────────────────────
+  const WHATSAPP_NUMBER = '5521999485532'; // ← seu número com DDI+DDD, sem espaços
+  // ──────────────────────────────────────────────────────────
 
-  // Lista de fotos da pasta /fotos/
-  // Adicione o nome de cada arquivo que você subiu na pasta fotos/
+  // ← liste aqui os nomes exatos dos arquivos que estão na pasta fotos/
   const photos = [
   'Small_.jpg',
   'Small_-2.jpg',
@@ -310,25 +249,20 @@
 
   const gallery = document.getElementById('gallery');
   const countEl = document.getElementById('count');
-  const listEl = document.getElementById('selectedList');
+  const listEl  = document.getElementById('selectedList');
   const btnWhatsapp = document.getElementById('btnWhatsapp');
   const hint = document.getElementById('hint');
 
   let selected = new Set();
 
-  // Monta a galeria
- photos.forEach((file) => {
+  photos.forEach((file) => {
     const item = document.createElement('div');
     item.className = 'photo-item';
-    item.dataset.file = file;
-    item.innerHTML = `
-      <img src="fotos/${file}" alt="${file}" draggable="false" />
-      <div class="photo-number">${file}</div>
-    `;
+    item.innerHTML = `<img src="fotos/${file}" alt="${file}" draggable="false" />`;
     item.addEventListener('click', () => toggle(item, file));
     gallery.appendChild(item);
   });
-  
+
   function toggle(item, file) {
     if (selected.has(file)) {
       selected.delete(file);
@@ -347,21 +281,17 @@
     if (count === 0) {
       listEl.textContent = 'Nenhuma foto selecionada ainda';
       btnWhatsapp.setAttribute('href', '#');
-      btnWhatsapp.setAttribute('aria-disabled', 'true');
       hint.style.display = 'block';
     } else {
       const files = [...selected].sort().join(', ');
       listEl.textContent = files;
       hint.style.display = 'none';
-
       const msg = `Olá! Quero as seguintes fotos:\n${files}`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       btnWhatsapp.setAttribute('href', url);
-      btnWhatsapp.removeAttribute('aria-disabled');
     }
   }
 
-  // Bloqueia clique direito e atalhos de salvar imagem
   document.addEventListener('contextmenu', e => e.preventDefault());
   document.addEventListener('keydown', e => {
     if ((e.ctrlKey || e.metaKey) && ['s','S','u','U'].includes(e.key)) e.preventDefault();
