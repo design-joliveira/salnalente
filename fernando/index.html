@@ -363,7 +363,7 @@
       }
 
       const clientName = window.location.pathname.split('/').filter(Boolean)[0];
-      const msg = `${clientName}\n\nFotos selecionadas:\n${[...selected].sort().join('\n')}\n\nTotal de fotos selecionadas: ${count}\nPreço: ${formatBRL(totalComDesconto)}\n------------------------------------------\nPix: 21999485532\nJosé Luis Oliveira`;
+      const msg = `${clientName}\n\nFotos selecionadas:\n${[...selected].sort().join('\n')}\n\nTotal de fotos selecionadas: ${count}\nPreço: ${formatBRL(totalComDesconto)}\n------------------------------------------\nPix: 21999485532\nJosé Oliveira`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       btnWhatsapp.setAttribute('href', url);
     }
