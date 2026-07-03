@@ -355,7 +355,7 @@ Os dois blocos separados, um depois do outro.
         priceSummary.innerHTML = `<div class="price-final">${formatBRL(total)}</div>`;
       }
 
-      const msg = `Olá! Quero as seguintes fotos:\n${files}`;
+      const msg = `Fotos selecionadas:\n${[...selected].sort().join('\n')}\n\nTotal de fotos selecionadas: ${count}\nPreço: ${formatBRL(totalComDesconto)}\n------------------------------------------\nPix: 21999485532\nJosé Luis Oliveira`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       btnWhatsapp.setAttribute('href', url);
     }
