@@ -115,6 +115,12 @@
     }
 
     .photo-item::before {
+      @media (max-width: 767px) {
+  .photo-item::before {
+    font-size: clamp(1.2rem, 6vw, 2rem);
+    letter-spacing: 0.08em;
+  }
+}
       content: 'SAL NA LENTE';
       position: absolute;
       inset: 0;
