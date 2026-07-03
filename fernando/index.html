@@ -115,28 +115,31 @@
     }
 
     .photo-item::before {
-      @media (max-width: 767px) {
+  content: 'SAL NA LENTE';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.4rem, 10vw, 4rem);
+  font-weight: 700;
+  color: rgba(255,255,255,0.22);
+  letter-spacing: 0.2em;
+  pointer-events: none;
+  z-index: 2;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+  transform: rotate(-20deg);
+}
+
+@media (max-width: 767px) {
   .photo-item::before {
     font-size: clamp(1.2rem, 6vw, 2rem);
-    letter-spacing: 0.05em;
+    letter-spacing: 0.08em;
   }
 }
-      content: 'SAL NA LENTE';
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.4rem, 10vw, 4rem);
-      font-weight: 700;
-      color: rgba(255,255,255,0.22);
-      letter-spacing: 0.2em;
-      pointer-events: none;
-      z-index: 2;
-      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-      transform: rotate(-20deg);
-    }
+Os dois blocos separados, um depois do outro.
+
 
     .sticky-bar {
       position: sticky;
