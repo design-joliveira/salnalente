@@ -8,7 +8,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
 
     :root {
-      --ocean: #1a2e3b;
+      --ocean: #000000;
       --foam: #ffffff;
       --salt: #6b7f8a;
       --accent: #e8c87a;
@@ -24,21 +24,15 @@
     }
 
     header {
-      padding: 1.25rem 1.5rem;
+      padding: 1.5rem;
       border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: center;
     }
 
-    .logo {
-      font-family: 'Playfair Display', serif;
-      font-style: italic;
-      font-size: 1.4rem;
-      color: var(--accent);
-      letter-spacing: 0.02em;
-    }
-
-    .logo span {
-      font-style: normal;
-      font-weight: 700;
+    .logo-img {
+      height: 80px;
+      width: auto;
     }
 
     .instruction {
@@ -229,7 +223,7 @@
 <body>
 
 <header>
-  <div class="logo"><span>Sal</span> na Lente</div>
+  <img src="../logo.png" alt="Sal na Lente" class="logo-img" />
 </header>
 
 <div class="instruction">
@@ -300,8 +294,8 @@
   const PRECO_UNITARIO = 30;
   const DESCONTOS = [
     { minFotos: 7, desconto: 0.15 },
-    { minFotos: 5, desconto: 0.10 },
-    { minFotos: 3, desconto: 0.05 },
+    { minFotos: 5, desconto: 0.12 },
+    { minFotos: 3, desconto: 0.07 },
   ];
   // ──────────────────────────────────────────────────────────
 
