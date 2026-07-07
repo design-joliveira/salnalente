@@ -257,8 +257,8 @@
 <div class="gallery" id="gallery"></div>
 
 <div class="sticky-bar">
-  <div class="selection-summary">
-    <span><span class="selection-count" id="count">0</span> fotos selecionadas</span>
+  <div class="selection-summary" id="selectionSummary" style="display: none;">
+    <span><span class="selection-count" id="count">0</span> <span id="selectionLabel">fotos selecionadas</span></span>
   </div>
   <div class="selected-list" id="selectedList">Nenhuma foto selecionada ainda</div>
   <div class="price-summary" id="priceSummary"></div>
@@ -280,6 +280,8 @@
 
   const gallery = document.getElementById('gallery');
   const countEl = document.getElementById('count');
+  const selectionSummary = document.getElementById('selectionSummary');
+  const selectionLabel = document.getElementById('selectionLabel');
   const listEl  = document.getElementById('selectedList');
   const btnWhatsapp = document.getElementById('btnWhatsapp');
   const hint = document.getElementById('hint');
@@ -338,13 +340,16 @@
   function update() {
     const count = selected.size;
     countEl.textContent = count;
+    selectionLabel.textContent = count === 1 ? 'foto selecionada' : 'fotos selecionadas';
 
     if (count === 0) {
+      selectionSummary.style.display = 'none';
       listEl.textContent = 'Nenhuma foto selecionada ainda';
       priceSummary.innerHTML = '';
       btnWhatsapp.setAttribute('href', '#');
       hint.style.display = 'block';
     } else {
+      selectionSummary.style.display = 'block';
       const files = [...selected].sort().join(', ');
       listEl.textContent = files;
       hint.style.display = 'none';
