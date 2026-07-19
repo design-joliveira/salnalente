@@ -246,7 +246,7 @@
 <body>
 
 <header>
-  <img src="../logo.png" alt="Sal na Lente" class="logo-img" />
+  <img src="/logo.png" alt="Sal na Lente" class="logo-img" />
 </header>
 
 <div class="instruction">
@@ -278,6 +278,17 @@
   const WHATSAPP_NUMBER = '5521999485532'; // ← seu número com DDI+DDD, sem espaços
   // ──────────────────────────────────────────────────────────
 
+  // Calcula a pasta atual (ex: "/ravi/") mesmo se a URL vier sem a barra
+  // final (ex: "/ravi"). Isso evita o site procurar arquivos na pasta errada.
+  function getBasePath() {
+    let path = window.location.pathname;
+    if (!path.endsWith('/')) {
+      path = path.substring(0, path.lastIndexOf('/') + 1);
+    }
+    return path;
+  }
+  const BASE_PATH = getBasePath();
+
   const gallery = document.getElementById('gallery');
   const countEl = document.getElementById('count');
   const selectionSummary = document.getElementById('selectionSummary');
@@ -288,14 +299,14 @@
 
   let selected = new Set();
 
-  // Carrega a lista de fotos do arquivo fotos.json
-  fetch('fotos.json')
+  // Carrega a lista de fotos do arquivo fotos.json (caminho calculado, não relativo)
+  fetch(BASE_PATH + 'fotos.json')
     .then(r => r.json())
     .then(photos => {
       photos.forEach((file) => {
         const item = document.createElement('div');
         item.className = 'photo-item';
-        item.innerHTML = `<img src="fotos/${file}" alt="${file}" draggable="false" />`;
+        item.innerHTML = `<img src="${BASE_PATH}fotos/${file}" alt="${file}" draggable="false" />`;
         item.addEventListener('click', () => toggle(item, file));
         gallery.appendChild(item);
       });
@@ -368,7 +379,8 @@
         priceSummary.innerHTML = `<div class="price-final">${formatBRL(total)}</div>`;
       }
 
-      const clientName = window.location.pathname.split('/').filter(Boolean)[1];
+      // Nome do cliente extraído da pasta atual (ex: "/ravi/" -> "ravi")
+      const clientName = BASE_PATH.split('/').filter(Boolean)[0] || '';
       const msg = `${clientName}\n\nFotos selecionadas:\n${[...selected].sort().join('\n')}\n\nTotal de fotos selecionadas: ${count}\nPreço: ${formatBRL(totalComDesconto)}\n------------------------------------------\nPix: 21999485532\nJosé Oliveira`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       btnWhatsapp.setAttribute('href', url);
