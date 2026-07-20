@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experimento C — Blend mode</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+    :root {
+      --ocean: #000;
+      --foam: #fff;
+      --salt: #6b7f8a;
+      --accent: #e8c87a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--ocean);
+      color: var(--foam);
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 4rem;
+    }
+
+    header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    nav { margin-bottom: 0.75rem; }
+    nav a { color: var(--accent); font-size: 0.8rem; text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .why {
+      color: var(--salt);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      max-width: 36rem;
+    }
+
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      align-items: center;
+    }
+
+    .label {
+      width: 100%;
+      max-width: 480px;
+      font-size: 0.75rem;
+      color: var(--salt);
+      margin-bottom: -0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .photo-item {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: brightness(0.92);
+    }
+
+    /* —— ATUAL —— */
+    .wm-current::before {
+      content: 'SAL NA LENTE';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 9vw, 3.2rem);
+      font-weight: 700;
+      color: rgba(255,255,255,0.22);
+      letter-spacing: 0.2em;
+      pointer-events: none;
+      z-index: 2;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.4);
+      transform: rotate(-20deg);
+    }
+
+    /* —— PROPOSTA C: blend + faixa densa —— */
+    .wm-blend .wm-layer {
+      position: absolute;
+      inset: -30%;
+      z-index: 2;
+      pointer-events: none;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: space-around;
+      justify-content: space-around;
+      gap: 2.5rem 1.5rem;
+      transform: rotate(-24deg);
+      mix-blend-mode: soft-light;
+      opacity: 0.95;
+    }
+
+    .wm-blend .wm-layer span {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.1rem, 4.5vw, 1.6rem);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: #fff;
+      white-space: nowrap;
+      flex: 0 0 auto;
+    }
+
+    /* Segunda camada com difference — reforça contraste */
+    .wm-blend .wm-layer-hard {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      mix-blend-mode: difference;
+      opacity: 0.55;
+    }
+
+    .wm-blend .wm-layer-hard span {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 9vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: #fff;
+      transform: rotate(-18deg);
+      white-space: nowrap;
+    }
+
+    .nav-exps {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-exps a {
+      color: var(--foam);
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav><a href="index.html">← Todos os experimentos</a></nav>
+    <span class="badge">Experimento C</span>
+    <h1>Blend mode adaptativo</h1>
+    <p class="why">
+      Usa <code>mix-blend-mode</code> para a marca se adaptar à foto: em áreas escuras fica clara,
+      em áreas claras inverte. Combina uma grade leve (soft-light) com um texto central
+      (difference), cobrindo bem cenas de praia claras e sombras fortes.
+    </p>
+  </header>
+
+  <div class="gallery">
+    <p class="label">Atual (referência)</p>
+    <div class="photo-item wm-current">
+      <img src="../fotos/Bernardo_ravi-18.jpg" alt="Referência atual" />
+    </div>
+
+    <p class="label">Proposta C — blend mode</p>
+    <div class="photo-item wm-blend">
+      <img src="../fotos/Bernardo_ravi-18.jpg" alt="Proposta C foto 1" />
+      <div class="wm-layer" aria-hidden="true">
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+      </div>
+      <div class="wm-layer-hard"><span>SAL NA LENTE</span></div>
+    </div>
+    <div class="photo-item wm-blend">
+      <img src="../fotos/Bernardo_ravi-31.jpg" alt="Proposta C foto 2" />
+      <div class="wm-layer" aria-hidden="true">
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+      </div>
+      <div class="wm-layer-hard"><span>SAL NA LENTE</span></div>
+    </div>
+    <div class="photo-item wm-blend">
+      <img src="../fotos/Bernardo_ravi-47.jpg" alt="Proposta C foto 3" />
+      <div class="wm-layer" aria-hidden="true">
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+        <span>SAL NA LENTE</span><span>SAL NA LENTE</span><span>SAL NA LENTE</span>
+      </div>
+      <div class="wm-layer-hard"><span>SAL NA LENTE</span></div>
+    </div>
+  </div>
+
+  <div class="nav-exps">
+    <a href="watermark-a.html">← A — Grade</a>
+    <a href="watermark-b.html">← B — Centro + cantos</a>
+  </div>
+</body>
+</html>

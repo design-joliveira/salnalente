@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experimento A3 — Grade escura</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+    :root {
+      --ocean: #000;
+      --foam: #fff;
+      --salt: #6b7f8a;
+      --accent: #e8c87a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--ocean);
+      color: var(--foam);
+      font-family: 'Inter', sans-serif;
+      padding-bottom: 4rem;
+    }
+
+    header {
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    nav { margin-bottom: 0.75rem; }
+    nav a { color: var(--accent); font-size: 0.8rem; text-decoration: none; }
+    nav a:hover { text-decoration: underline; }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.35rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .why {
+      color: var(--salt);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      max-width: 36rem;
+    }
+
+    .swatch {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      font-size: 0.75rem;
+      color: var(--salt);
+    }
+
+    .swatch i {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      background: #1a1a1a;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.35);
+    }
+
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      align-items: center;
+    }
+
+    .label {
+      width: 100%;
+      max-width: 480px;
+      font-size: 0.75rem;
+      color: var(--salt);
+      margin-bottom: -0.75rem;
+      letter-spacing: 0.04em;
+    }
+
+    .photo-item {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: brightness(0.92);
+    }
+
+    /* A original — branco, para comparar */
+    .wm-a::before {
+      content: '';
+      position: absolute;
+      inset: -40%;
+      z-index: 2;
+      pointer-events: none;
+      transform: rotate(-28deg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='90'%3E%3Ctext x='0' y='55' font-family='Georgia, serif' font-size='22' font-weight='700' fill='rgba(255,255,255,0.28)' letter-spacing='6'%3ESAL NA LENTE%3C/text%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 280px 90px;
+    }
+
+    /* A3 — preto com leve brilho (bom em areia / céu claros) */
+    .wm-tile::before {
+      content: '';
+      position: absolute;
+      inset: -40%;
+      z-index: 2;
+      pointer-events: none;
+      transform: rotate(-28deg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='90'%3E%3Ctext x='0' y='55' font-family='Georgia, serif' font-size='22' font-weight='700' fill='rgba(0,0,0,0.38)' stroke='rgba(255,255,255,0.22)' stroke-width='0.6' letter-spacing='6'%3ESAL NA LENTE%3C/text%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 280px 90px;
+    }
+
+    .wm-a::after,
+    .wm-tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.06);
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.15) 100%);
+    }
+
+    .nav-exps {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      padding: 2rem 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .nav-exps a {
+      color: var(--foam);
+      font-size: 0.85rem;
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent);
+      padding-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav><a href="index.html">← Todos os experimentos</a></nav>
+    <span class="badge">Experimento A3</span>
+    <h1>Grade escura</h1>
+    <p class="why">
+      Mesma grade da opção A, em preto (~38%) com contorno branco leve.
+      Funciona melhor em fotos claras (areia, céu, pele iluminada), onde o branco quase some.
+    </p>
+    <p class="swatch"><i></i> rgba(0, 0, 0, 0.38) + stroke branco</p>
+  </header>
+
+  <div class="gallery">
+    <p class="label">A — branco (referência)</p>
+    <div class="photo-item wm-a">
+      <img src="../fotos/Bernardo_ravi-10.jpg" alt="A branco" />
+    </div>
+
+    <p class="label">A3 — escuro</p>
+    <div class="photo-item wm-tile">
+      <img src="../fotos/Bernardo_ravi-10.jpg" alt="A3 foto 1" />
+    </div>
+    <div class="photo-item wm-tile">
+      <img src="../fotos/Bernardo_ravi-22.jpg" alt="A3 foto 2" />
+    </div>
+    <div class="photo-item wm-tile">
+      <img src="../fotos/Bernardo_ravi-35.jpg" alt="A3 foto 3" />
+    </div>
+  </div>
+
+  <div class="nav-exps">
+    <a href="watermark-a.html">← A — Branco</a>
+    <a href="watermark-a2.html">← A2 — Dourado</a>
+  </div>
+</body>
+</html>

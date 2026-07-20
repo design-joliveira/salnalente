@@ -116,30 +116,16 @@
     }
 
     .photo-item::before {
-  content: 'SAL NA LENTE';
-  position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.4rem, 10vw, 4rem);
-  font-weight: 700;
-  color: rgba(255,255,255,0.22);
-  letter-spacing: 0.2em;
-  pointer-events: none;
-  z-index: 2;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.4);
-  transform: rotate(-20deg);
-}
-
-@media (max-width: 767px) {
-  .photo-item::before {
-    font-size: clamp(1.8rem, 9vw, 4rem);
-    letter-spacing: 0.08em;
-  }
-}
-
+      content: '';
+      position: absolute;
+      inset: -40%;
+      z-index: 2;
+      pointer-events: none;
+      transform: rotate(-28deg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='90'%3E%3Ctext x='0' y='55' font-family='Georgia, serif' font-size='22' font-weight='700' fill='rgba(0,0,0,0.38)' stroke='rgba(255,255,255,0.22)' stroke-width='0.6' letter-spacing='6'%3ESAL NA LENTE%3C/text%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 280px 90px;
+    }
 
 .sticky-bar {
   position: sticky;
@@ -367,8 +353,7 @@
         priceSummary.innerHTML = `<div class="price-final">${formatBRL(total)}</div>`;
       }
 
-      const clientName = window.location.pathname.split('/').filter(Boolean)[1];
-      const msg = `${clientName}\n\nFotos selecionadas:\n${[...selected].sort().join('\n')}\n\nTotal de fotos selecionadas: ${count}\nPreço: ${formatBRL(totalComDesconto)}\n------------------------------------------\nPix: 21999485532\nJosé Oliveira`;
+      const msg = `Fotos selecionadas:\n${[...selected].sort().join('\n')}\n\nTotal de fotos selecionadas: ${count}\nPreço: ${formatBRL(totalComDesconto)}\n------------------------------------------\nPix: 21999485532\n(Celular) José Luis Oliveira`;
       const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
       btnWhatsapp.setAttribute('href', url);
     }
