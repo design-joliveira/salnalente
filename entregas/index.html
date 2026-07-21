@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sal na Lente — Entregas</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@700&display=swap');
+
+    :root {
+      --ocean: #000;
+      --foam: #fff;
+      --salt: #6b7f8a;
+      --accent: #e8c87a;
+      --line: rgba(255,255,255,0.08);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--ocean);
+      color: var(--foam);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      padding: 2rem 1.5rem 4rem;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      padding-bottom: 1.25rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .eyebrow {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .lead {
+      color: var(--salt);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      align-items: center;
+    }
+
+    label {
+      font-size: 0.75rem;
+      color: var(--salt);
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    select {
+      background: #111;
+      color: var(--foam);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.55rem 0.75rem;
+      font-family: inherit;
+      font-size: 0.875rem;
+      min-width: 140px;
+    }
+
+    .totals {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+
+    .total-card {
+      border: 1px solid var(--line);
+      padding: 1rem 1.1rem;
+    }
+
+    .total-card .label {
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--salt);
+      margin-bottom: 0.35rem;
+    }
+
+    .total-card .value {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--accent);
+    }
+
+    .total-card .hint {
+      font-size: 0.75rem;
+      color: var(--salt);
+      margin-top: 0.25rem;
+    }
+
+    h2 {
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--salt);
+      margin-bottom: 0.75rem;
+    }
+
+    .list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 0.75rem;
+      align-items: center;
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--line);
+      font-size: 0.875rem;
+    }
+
+    .row .client {
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .row .date {
+      color: var(--salt);
+      font-size: 0.8rem;
+    }
+
+    .row .count {
+      font-weight: 600;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    .empty, .error {
+      color: var(--salt);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      padding: 1.5rem 0;
+    }
+
+    footer {
+      margin-top: 3rem;
+      text-align: center;
+      font-size: 0.75rem;
+      color: rgba(107,127,138,0.4);
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Uso interno</p>
+    <h1>Entregas</h1>
+    <p class="lead">Histórico de fotos enviadas por cliente.</p>
+  </header>
+
+  <div class="toolbar">
+    <label>
+      Mês
+      <select id="monthSelect"></select>
+    </label>
+    <label>
+      Cliente
+      <select id="clientSelect">
+        <option value="">Todos</option>
+      </select>
+    </label>
+  </div>
+
+  <div class="totals">
+    <div class="total-card">
+      <div class="label">Fotos vendidas</div>
+      <div class="value" id="totalPhotos">0</div>
+      <div class="hint" id="totalHint">—</div>
+    </div>
+    <div class="total-card">
+      <div class="label">Sessões com venda</div>
+      <div class="value" id="totalShipments">0</div>
+      <div class="hint" id="shipHint">—</div>
+    </div>
+  </div>
+
+  <h2>Por envio</h2>
+  <div class="list" id="list"></div>
+
+  <footer>salnalente.com.br/entregas</footer>
+
+  <script>
+    const monthSelect = document.getElementById('monthSelect');
+    const clientSelect = document.getElementById('clientSelect');
+    const listEl = document.getElementById('list');
+    const totalPhotos = document.getElementById('totalPhotos');
+    const totalShipments = document.getElementById('totalShipments');
+    const totalHint = document.getElementById('totalHint');
+    const shipHint = document.getElementById('shipHint');
+
+    let entries = [];
+
+    function monthKey(dateStr) {
+      return (dateStr || '').slice(0, 7); // YYYY-MM
+    }
+
+    function formatMonth(key) {
+      if (!key) return '—';
+      const [y, m] = key.split('-');
+      const names = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+      return `${names[Number(m) - 1]}/${y}`;
+    }
+
+    function formatDate(dateStr) {
+      if (!dateStr) return '—';
+      const [y, m, d] = dateStr.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    function uniqueSorted(values) {
+      return [...new Set(values.filter(Boolean))].sort().reverse();
+    }
+
+    function render() {
+      const month = monthSelect.value;
+      const client = clientSelect.value;
+
+      const filtered = entries.filter((e) => {
+        if (month && monthKey(e.date) !== month) return false;
+        if (client && e.client !== client) return false;
+        return true;
+      });
+
+      const photos = filtered.reduce((sum, e) => sum + (Number(e.count) || 0), 0);
+      totalPhotos.textContent = photos;
+      totalShipments.textContent = filtered.length;
+      totalHint.textContent = client
+        ? `${client} · ${formatMonth(month)}`
+        : formatMonth(month) || 'todos os períodos';
+      shipHint.textContent = filtered.length === 1 ? '1 entrega' : `${filtered.length} entregas`;
+
+      listEl.innerHTML = '';
+      if (filtered.length === 0) {
+        listEl.innerHTML = '<p class="empty">Nenhuma entrega neste filtro.</p>';
+        return;
+      }
+
+      filtered
+        .slice()
+        .sort((a, b) => String(b.date).localeCompare(String(a.date)) || String(b.updatedAt || '').localeCompare(String(a.updatedAt || '')))
+        .forEach((e) => {
+          const row = document.createElement('div');
+          row.className = 'row';
+          row.innerHTML = `
+            <div>
+              <div class="client">${e.client || '—'}</div>
+              <div class="date">${formatDate(e.date)}</div>
+            </div>
+            <div></div>
+            <div class="count">${e.count} foto${e.count === 1 ? '' : 's'}</div>
+          `;
+          listEl.appendChild(row);
+        });
+    }
+
+    fetch('entregas.json')
+      .then((r) => {
+        if (!r.ok) throw new Error('missing');
+        return r.json();
+      })
+      .then((data) => {
+        entries = Array.isArray(data) ? data : [];
+
+        const months = uniqueSorted(entries.map((e) => monthKey(e.date)));
+        const clients = [...new Set(entries.map((e) => e.client).filter(Boolean))].sort();
+
+        const nowKey = new Date().toISOString().slice(0, 7);
+        monthSelect.innerHTML = '';
+        if (months.length === 0) {
+          monthSelect.innerHTML = `<option value="${nowKey}">${formatMonth(nowKey)}</option>`;
+        } else {
+          months.forEach((m) => {
+            const opt = document.createElement('option');
+            opt.value = m;
+            opt.textContent = formatMonth(m);
+            if (m === nowKey) opt.selected = true;
+            monthSelect.appendChild(opt);
+          });
+          if (![...monthSelect.options].some((o) => o.selected) && months[0]) {
+            monthSelect.value = months[0];
+          }
+        }
+
+        clients.forEach((c) => {
+          const opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = c;
+          clientSelect.appendChild(opt);
+        });
+
+        monthSelect.addEventListener('change', render);
+        clientSelect.addEventListener('change', render);
+        render();
+      })
+      .catch(() => {
+        listEl.innerHTML = '<p class="error">Não foi possível carregar entregas.json. Rode o gerar-downloads.command ao menos uma vez.</p>';
+      });
+  </script>
+</body>
+</html>
