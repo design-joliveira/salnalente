@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Sal na Lente — Download</title>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LRCVR4REXH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-LRCVR4REXH');
+  </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
 
@@ -241,6 +249,15 @@
           btn.href = downloadUrl;
           btn.setAttribute('download', '');
           btn.rel = 'noopener noreferrer';
+          btn.addEventListener('click', () => {
+            if (typeof gtag === 'function') {
+              gtag('event', 'file_download', {
+                file_name: preview,
+                link_url: downloadUrl,
+                page_path: window.location.pathname
+              });
+            }
+          });
         } else {
           btn.href = '#';
           btn.setAttribute('aria-disabled', 'true');
