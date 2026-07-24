@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sal na Lente</title>
+  <title>Home mix v2 — Experiment</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
@@ -29,6 +29,18 @@
 
     a { color: inherit; text-decoration: none; }
 
+    .exp-bar {
+      background: #111;
+      border-bottom: 1px solid #222;
+      padding: 0.65rem 1rem;
+      font-size: 0.75rem;
+      color: #888;
+      text-align: center;
+    }
+
+    .exp-bar a { color: #e8c87a; }
+
+    /* Coluna única — mesmo eixo em todas as seções */
     .wrap {
       width: 100%;
       max-width: var(--content);
@@ -48,6 +60,7 @@
       border-top: none;
     }
 
+    /* ── Header ── */
     header.top {
       padding: 1.5rem var(--pad-x);
       border-bottom: 1px solid rgba(255,255,255,0.08);
@@ -124,6 +137,7 @@
       flex-shrink: 0;
     }
 
+    /* ── Sessões ── */
     .formats {
       display: flex;
       flex-wrap: wrap;
@@ -142,29 +156,30 @@
       letter-spacing: 0.02em;
     }
 
+    /* ── Galeria — mesma coluna ── */
     .gallery-section {
       padding-top: 0;
       border-top: none;
     }
 
-    .gallery {
+    .wm-gallery {
       display: grid;
       grid-template-columns: 1fr;
       gap: 12px;
     }
 
     @media (min-width: 600px) {
-      .gallery {
+      .wm-gallery {
         grid-template-columns: 1fr 1fr;
       }
     }
 
-    .gallery .photo {
+    .wm-gallery .photo {
       position: relative;
       overflow: hidden;
     }
 
-    .gallery .photo img {
+    .wm-gallery .photo img {
       width: 100%;
       height: auto;
       display: block;
@@ -173,6 +188,7 @@
       -webkit-user-drag: none;
     }
 
+    /* ── Como funciona ── */
     section.how {
       padding-bottom: calc(var(--section-y) / 2);
     }
@@ -224,6 +240,7 @@
       line-height: 1.5;
     }
 
+    /* ── Praias ── */
     .beaches-list {
       margin-top: 1rem;
       color: var(--foam);
@@ -239,6 +256,7 @@
       line-height: 1.6;
     }
 
+    /* ── Fechamento — mesmo alinhamento à esquerda ── */
     .closing h2 {
       font-family: 'Inter', sans-serif;
       font-size: clamp(1.35rem, 2.8vw, 1.75rem);
@@ -250,6 +268,7 @@
       text-align: center;
     }
 
+    /* ── Footer ── */
     footer.site-foot {
       padding: 2rem var(--pad-x) 2.5rem;
       border-top: 1px solid rgba(255,255,255,0.06);
@@ -287,10 +306,14 @@
   </style>
 </head>
 <body>
+  <div class="exp-bar">
+    Mix v2 · fontes sans-serif · coluna única alinhada
+    · <a href="2026-07-24-home-prospeccao.html">ver A / B / C</a>
+  </div>
 
   <header class="top">
     <div class="wrap">
-      <img src="logo.png" alt="Sal na Lente" class="logo-img" />
+      <img src="../logo.png" alt="Sal na Lente" class="logo-img" />
     </div>
   </header>
 
@@ -309,7 +332,13 @@
 
   <section class="gallery-section">
     <div class="wrap">
-      <div class="gallery" id="gallery"></div>
+      <div class="wm-gallery">
+        <div class="photo"><img src="../fernando/fotos/Small_-11.jpg" alt="" draggable="false" /></div>
+        <div class="photo"><img src="../fernando/fotos/Small_-13.jpg" alt="" draggable="false" /></div>
+        <div class="photo"><img src="../fernando/fotos/Small_-15.jpg" alt="" draggable="false" /></div>
+        <div class="photo"><img src="../fernando/fotos/Small_-2.jpg" alt="" draggable="false" /></div>
+        <div class="photo"><img src="../fernando/fotos/Small_-4.jpg" alt="" draggable="false" /></div>
+      </div>
     </div>
   </section>
 
@@ -381,26 +410,8 @@
     document.getElementById('wa-cta').href =
       `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(MSG)}`;
 
-    // Galeria: lista as fotos de home/fotos via fotos.json
-    const gallery = document.getElementById('gallery');
-    fetch('home/fotos.json')
-      .then((r) => {
-        if (!r.ok) throw new Error('missing');
-        return r.json();
-      })
-      .then((files) => {
-        if (!Array.isArray(files) || files.length === 0) return;
-        files.forEach((file) => {
-          const item = document.createElement('div');
-          item.className = 'photo';
-          item.innerHTML = `<img src="home/fotos/${file}" alt="" draggable="false" loading="lazy" />`;
-          gallery.appendChild(item);
-        });
-      })
-      .catch(() => {});
-
     document.addEventListener('contextmenu', (e) => {
-      if (e.target.closest('.gallery')) e.preventDefault();
+      if (e.target.closest('.wm-gallery')) e.preventDefault();
     });
   </script>
 </body>
