@@ -45,15 +45,28 @@
     </nav>
   </header>
 
-  <section class="sessions">
+  <section class="gallery-block">
     <div class="wrap">
-      <h2 class="section-title">Galeria</h2>
+      <h2 class="section-title">Surf</h2>
+      <div class="gallery gallery--home" data-gallery data-src="home"></div>
     </div>
   </section>
 
-  <section class="gallery-section">
+  <hr class="gallery-divider" />
+
+  <section class="gallery-block">
     <div class="wrap">
-      <div class="gallery" id="gallery"></div>
+      <h2 class="section-title">beach vibes</h2>
+      <div class="gallery gallery--home" data-gallery data-src="home"></div>
+    </div>
+  </section>
+
+  <hr class="gallery-divider" />
+
+  <section class="gallery-block">
+    <div class="wrap">
+      <h2 class="section-title">Retratos</h2>
+      <div class="gallery gallery--home" data-gallery data-src="home"></div>
     </div>
   </section>
 
@@ -82,7 +95,6 @@
   </div>
 
   <script>
-    const FOTOS_PAGE = 'galeria';
     const INSTAGRAM = 'https://instagram.com/salnalente';
 
     document.getElementById('ig-link').href = INSTAGRAM;
@@ -154,33 +166,48 @@
       }
     });
 
-    const gallery = document.getElementById('gallery');
-    fetch(`${FOTOS_PAGE}/fotos.json`)
-      .then((r) => {
-        if (!r.ok) throw new Error('missing');
-        return r.json();
-      })
-      .then((files) => {
-        if (!Array.isArray(files) || files.length === 0) return;
-        files.forEach((file) => {
-          const src = `${FOTOS_PAGE}/fotos/${file}`;
-          const item = document.createElement('div');
-          item.className = 'photo';
-          item.setAttribute('role', 'button');
-          item.setAttribute('tabindex', '0');
-          item.setAttribute('aria-label', 'Ampliar foto');
-          item.innerHTML = `<img src="${src}" alt="" draggable="false" loading="lazy" />`;
-          item.addEventListener('click', () => openLightbox(src));
-          item.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              openLightbox(src);
-            }
-          });
-          gallery.appendChild(item);
+    function fillGallery(el, files, basePath) {
+      files.forEach((file) => {
+        const src = `${basePath}/fotos/${file}`;
+        const item = document.createElement('div');
+        item.className = 'photo';
+        item.setAttribute('role', 'button');
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('aria-label', 'Ampliar foto');
+        item.innerHTML = `<img src="${src}" alt="" draggable="false" loading="lazy" />`;
+        item.addEventListener('click', () => openLightbox(src));
+        item.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            openLightbox(src);
+          }
         });
-      })
-      .catch(() => {});
+        el.appendChild(item);
+      });
+    }
+
+    const galleries = document.querySelectorAll('[data-gallery]');
+    const sources = [...new Set([...galleries].map((g) => g.dataset.src || 'home'))];
+
+    Promise.all(
+      sources.map((src) =>
+        fetch(`${src}/fotos.json`)
+          .then((r) => {
+            if (!r.ok) throw new Error('missing');
+            return r.json();
+          })
+          .then((files) => [src, files])
+          .catch(() => [src, null])
+      )
+    ).then((entries) => {
+      const bySrc = Object.fromEntries(entries);
+      galleries.forEach((el) => {
+        const base = el.dataset.src || 'home';
+        const files = bySrc[base];
+        if (!Array.isArray(files) || files.length === 0) return;
+        fillGallery(el, files, base);
+      });
+    });
 
     document.addEventListener('contextmenu', (e) => {
       if (e.target.closest('.gallery') || e.target.closest('.lightbox')) {
