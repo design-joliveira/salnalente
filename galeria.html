@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sal na Lente — Sessões</title>
+  <title>Sal na Lente — Galeria</title>
   <link rel="stylesheet" href="site.css" />
 </head>
 <body>
@@ -16,8 +16,8 @@
 
       <nav class="nav-desktop" aria-label="Principal">
         <a href="index.html">home</a>
-        <a href="sessoes.html" aria-current="page">sessões</a>
-        <a href="galeria.html">galeria</a>
+        <a href="sessoes.html">sessões</a>
+        <a href="galeria.html" aria-current="page">galeria</a>
         <a href="sobre.html">sobre</a>
         <a href="contato.html">contato</a>
       </nav>
@@ -38,8 +38,8 @@
 
     <nav class="nav-mobile" id="navMobile" aria-label="Menu mobile" hidden>
       <a href="index.html">home</a>
-      <a href="sessoes.html" aria-current="page">sessões</a>
-      <a href="galeria.html">galeria</a>
+      <a href="sessoes.html">sessões</a>
+      <a href="galeria.html" aria-current="page">galeria</a>
       <a href="sobre.html">sobre</a>
       <a href="contato.html">contato</a>
     </nav>
@@ -47,42 +47,13 @@
 
   <section class="sessions">
     <div class="wrap">
-      <p class="section-label">Sessões</p>
-      <h2 class="section-title">Individuais ou em grupos de até 4 pessoas</h2>
-      <p class="section-body">Você escolhe: fotos, vídeos ou o combo.<br />Da resenha na areia até a última onda</p>
-      <p class="formats-list">Foto · Vídeo · Combo foto + vídeo</p>
+      <h2 class="section-title">Galeria</h2>
     </div>
   </section>
 
   <section class="gallery-section">
     <div class="wrap">
       <div class="gallery" id="gallery"></div>
-    </div>
-  </section>
-
-  <section class="how">
-    <div class="wrap">
-      <p class="section-label">Como funciona</p>
-      <h2 class="section-title">Do mar direto pra você</h2>
-    </div>
-  </section>
-
-  <section class="beaches">
-    <div class="wrap">
-      <p class="section-label">Onde fotografo</p>
-      <h2 class="section-title">No Rio, em geral na Zona Oeste</h2>
-      <p class="beaches-list">Barra da Tijuca · São Conrado · Reserva · Recreio · Prainha · Grumari</p>
-      <p class="beaches-note">Quer sessão em outro pico? Me manda um WhatsApp e a gente combina.</p>
-    </div>
-  </section>
-
-  <section class="closing">
-    <div class="wrap">
-      <h2>Tem onda? Partiu pra água!</h2>
-      <a class="btn-wa" id="wa-cta" href="#" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        Agende sua sessão
-      </a>
     </div>
   </section>
 
@@ -96,15 +67,25 @@
     </div>
   </footer>
 
+  <div
+    class="lightbox"
+    id="lightbox"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-label="Foto ampliada"
+  >
+    <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Fechar">
+      &times;
+    </button>
+    <img id="lightboxImg" src="" alt="" />
+  </div>
+
   <script>
-    const FOTOS_PAGE = 'sessoes';
+    const FOTOS_PAGE = 'galeria';
     const INSTAGRAM = 'https://instagram.com/salnalente';
-    const WHATSAPP = '5521999485532';
-    const MSG = 'Olá! Quero agendar uma sessão de fotos com Sal na Lente.';
 
     document.getElementById('ig-link').href = INSTAGRAM;
-    document.getElementById('wa-cta').href =
-      `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(MSG)}`;
 
     const menuToggle = document.getElementById('menuToggle');
     const navMobile = document.getElementById('navMobile');
@@ -135,6 +116,44 @@
       link.addEventListener('click', closeMenu);
     });
 
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.hidden = false;
+      requestAnimationFrame(() => lightbox.classList.add('open'));
+      document.body.classList.add('lightbox-open');
+      lightboxClose.focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.classList.remove('lightbox-open');
+      const onEnd = () => {
+        lightbox.hidden = true;
+        lightboxImg.removeAttribute('src');
+        lightbox.removeEventListener('transitionend', onEnd);
+      };
+      lightbox.addEventListener('transitionend', onEnd);
+    }
+
+    lightboxClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeLightbox();
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+        closeLightbox();
+      }
+    });
+
     const gallery = document.getElementById('gallery');
     fetch(`${FOTOS_PAGE}/fotos.json`)
       .then((r) => {
@@ -143,19 +162,30 @@
       })
       .then((files) => {
         if (!Array.isArray(files) || files.length === 0) return;
-        const first = 'home_DSC0146.jpg';
-        const ordered = [first, ...files.filter((f) => f !== first)];
-        ordered.forEach((file) => {
+        files.forEach((file) => {
+          const src = `${FOTOS_PAGE}/fotos/${file}`;
           const item = document.createElement('div');
           item.className = 'photo';
-          item.innerHTML = `<img src="${FOTOS_PAGE}/fotos/${file}" alt="" draggable="false" loading="lazy" />`;
+          item.setAttribute('role', 'button');
+          item.setAttribute('tabindex', '0');
+          item.setAttribute('aria-label', 'Ampliar foto');
+          item.innerHTML = `<img src="${src}" alt="" draggable="false" loading="lazy" />`;
+          item.addEventListener('click', () => openLightbox(src));
+          item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openLightbox(src);
+            }
+          });
           gallery.appendChild(item);
         });
       })
       .catch(() => {});
 
     document.addEventListener('contextmenu', (e) => {
-      if (e.target.closest('.gallery')) e.preventDefault();
+      if (e.target.closest('.gallery') || e.target.closest('.lightbox')) {
+        e.preventDefault();
+      }
     });
   </script>
 </body>

@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nav active state — Experiment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #ffffff;
+      --ink: #1a1a1a;
+      --salt: #6b7f8a;
+      --accent: #e85a4f;
+      --line: rgba(0,0,0,0.08);
+      --content: 720px;
+      --pad-x: 1.5rem;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background: #f0f2f3;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .toolbar {
+      background: #1a1a1a;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0;
+      flex-wrap: wrap;
+    }
+
+    .toolbar > span.label {
+      color: #888;
+      font-size: 13px;
+      margin-right: 8px;
+    }
+
+    .tab {
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: 1px solid #444;
+      background: transparent;
+      color: #ccc;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+
+    .tab:hover { border-color: #888; color: white; }
+    .tab.active { background: white; color: #1a1a1a; border-color: white; font-weight: 500; }
+
+    .hint {
+      margin-left: auto;
+      color: #555;
+      font-size: 12px;
+    }
+
+    .variant {
+      display: none;
+      flex: 1;
+      overflow: auto;
+      padding: 28px 20px 48px;
+    }
+
+    .variant.active { display: block; }
+
+    .hypothesis {
+      max-width: var(--content);
+      margin: 0 auto 20px;
+      font-size: 0.875rem;
+      color: #555;
+      line-height: 1.5;
+      background: #fff;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .hypothesis strong { color: var(--ink); font-weight: 600; }
+
+    .frame {
+      max-width: var(--content);
+      margin: 0 auto;
+      background: var(--bg);
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.06);
+    }
+
+    .frame-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      padding: 10px 16px;
+      background: #fafafa;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .page-stub {
+      padding: 28px var(--pad-x) 40px;
+      text-align: center;
+    }
+
+    .page-stub h2 {
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--salt);
+      margin-bottom: 0.5rem;
+    }
+
+    .page-stub p {
+      font-size: 0.9rem;
+      color: var(--salt);
+      opacity: 0.75;
+    }
+
+    .mobile-block {
+      max-width: var(--content);
+      margin: 24px auto 0;
+    }
+
+    .mobile-frame {
+      max-width: 360px;
+      margin: 0 auto;
+      background: var(--bg);
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.06);
+    }
+
+    /* Shared header chrome */
+    .preview-header {
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .preview-header .wrap {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      min-height: 72px;
+      padding: 0.75rem var(--pad-x);
+      max-width: var(--content);
+      margin: 0 auto;
+    }
+
+    .logo-img {
+      height: 52px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-desk {
+      display: flex;
+      align-items: center;
+      gap: 1.75rem;
+    }
+
+    .nav-desk a {
+      font-size: 0.9rem;
+      font-weight: 400;
+      text-transform: lowercase;
+      color: var(--salt);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-desk a:hover { color: var(--accent); }
+
+    .nav-mob {
+      display: flex;
+      flex-direction: column;
+      border-top: 1px solid var(--line);
+      padding: 0.5rem var(--pad-x) 1rem;
+      background: #fff;
+    }
+
+    .nav-mob a {
+      padding: 0.9rem 0;
+      font-size: 1rem;
+      font-weight: 400;
+      text-transform: lowercase;
+      color: var(--salt);
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+      transition: color 0.2s;
+    }
+
+    .nav-mob a:last-child { border-bottom: none; }
+    .nav-mob a:hover { color: var(--accent); }
+
+    .burger {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 44px;
+      height: 44px;
+      padding: 10px;
+      border: none;
+      background: transparent;
+    }
+
+    .burger span {
+      display: block;
+      height: 2px;
+      width: 100%;
+      background: var(--ink);
+    }
+
+    /* ── V1: Underline coral ── */
+    .v1-nav-desk a.is-active {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .v1-nav-desk a.is-active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -6px;
+      height: 2px;
+      background: var(--accent);
+      border-radius: 1px;
+    }
+
+    .v1-nav-mob a.is-active {
+      color: var(--ink);
+      font-weight: 500;
+      box-shadow: inset 0 -2px 0 var(--accent);
+    }
+
+    /* ── V2: Weight + ink (no chrome) ── */
+    .v2-nav-desk a.is-active {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .v2-nav-mob a.is-active {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    /* ── V3: Accent bar / inset mark ── */
+    .v3-nav-desk a {
+      padding: 0.35rem 0;
+    }
+
+    .v3-nav-desk a.is-active {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .v3-nav-desk a.is-active::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: -14px;
+      width: 18px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 0 0 2px 2px;
+    }
+
+    .v3-nav-mob a.is-active {
+      color: var(--ink);
+      font-weight: 500;
+      padding-left: 0.75rem;
+      border-left: 3px solid var(--accent);
+      margin-left: -3px;
+    }
+
+    @media (max-width: 600px) {
+      .hint { display: none; }
+      .tab { font-size: 12px; padding: 6px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <span class="label">Variants</span>
+    <button class="tab active" type="button" onclick="show('v1', this)">1 — Sublinhado coral</button>
+    <button class="tab" type="button" onclick="show('v2', this)">2 — Peso e tinta</button>
+    <button class="tab" type="button" onclick="show('v3', this)">3 — Marcador accent</button>
+    <span class="hint">nav active state · 3 variants · página “sessões”</span>
+  </div>
+
+  <!-- ═══════════ V1 ═══════════ -->
+  <section class="variant v1 active">
+    <p class="hypothesis">
+      <strong>1 — Sublinhado coral.</strong>
+      O item ativo ganha uma linha accent sob o texto (desktop) e no rodapé do link (mobile). Hipótese: sinal claro e familiar, sem competir com o logo.
+    </p>
+
+    <div class="frame">
+      <div class="frame-label">Desktop — página Sessões</div>
+      <header class="preview-header">
+        <div class="wrap">
+          <img class="logo-img" src="../logo-site.png" alt="Sal na Lente" />
+          <nav class="nav-desk v1-nav-desk" aria-label="Principal">
+            <a href="#">home</a>
+            <a href="#" class="is-active" aria-current="page">sessões</a>
+            <a href="#">galeria</a>
+            <a href="#">sobre</a>
+            <a href="#">contato</a>
+          </nav>
+        </div>
+      </header>
+      <div class="page-stub">
+        <h2>Individuais ou em grupos de até 4 pessoas</h2>
+        <p>Conteúdo da página (stub) — o foco é o menu.</p>
+      </div>
+    </div>
+
+    <div class="mobile-block">
+      <div class="mobile-frame">
+        <div class="frame-label">Mobile — menu aberto</div>
+        <header class="preview-header">
+          <div class="wrap">
+            <img class="logo-img" src="../logo-site.png" alt="Sal na Lente" />
+            <button class="burger" type="button" aria-label="Menu" aria-expanded="true">
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+        </header>
+        <nav class="nav-mob v1-nav-mob" aria-label="Menu mobile">
+          <a href="#">home</a>
+          <a href="#" class="is-active" aria-current="page">sessões</a>
+          <a href="#">galeria</a>
+          <a href="#">sobre</a>
+          <a href="#">contato</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ V2 ═══════════ -->
+  <section class="variant v2">
+    <p class="hypothesis">
+      <strong>2 — Peso e tinta.</strong>
+      Sem linha nem marca: só tipografia. Ativo em <em>ink</em> + peso 600; inativos em salt. Hipótese: o mais limpo — cabe no visual atual com zero chrome novo.
+    </p>
+
+    <div class="frame">
+      <div class="frame-label">Desktop — página Sessões</div>
+      <header class="preview-header">
+        <div class="wrap">
+          <img class="logo-img" src="../logo-site.png" alt="Sal na Lente" />
+          <nav class="nav-desk v2-nav-desk" aria-label="Principal">
+            <a href="#">home</a>
+            <a href="#" class="is-active" aria-current="page">sessões</a>
+            <a href="#">galeria</a>
+            <a href="#">sobre</a>
+            <a href="#">contato</a>
+          </nav>
+        </div>
+      </header>
+      <div class="page-stub">
+        <h2>Individuais ou em grupos de até 4 pessoas</h2>
+        <p>Conteúdo da página (stub) — o foco é o menu.</p>
+      </div>
+    </div>
+
+    <div class="mobile-block">
+      <div class="mobile-frame">
+        <div class="frame-label">Mobile — menu aberto</div>
+        <header class="preview-header">
+          <div class="wrap">
+            <img class="logo-img" src="../logo-site.png" alt="Sal na Lente" />
+            <button class="burger" type="button" aria-label="Menu" aria-expanded="true">
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+        </header>
+        <nav class="nav-mob v2-nav-mob" aria-label="Menu mobile">
+          <a href="#">home</a>
+          <a href="#" class="is-active" aria-current="page">sessões</a>
+          <a href="#">galeria</a>
+          <a href="#">sobre</a>
+          <a href="#">contato</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ V3 ═══════════ -->
+  <section class="variant v3">
+    <p class="hypothesis">
+      <strong>3 — Marcador accent.</strong>
+      Desktop: traço coral curto acima do item (encaixa no sticky header). Mobile: barra vertical à esquerda. Hipótese: accent bem visível, sem “sublinhado de link”.
+    </p>
+
+    <div class="frame">
+      <div class="frame-label">Desktop — página Sessões</div>
+      <header class="preview-header">
+        <div class="wrap">
+          <img class="logo-img" src="../logo-site.png" alt="Sal na Lente" />
+          <nav class="nav-desk v3-nav-desk" aria-label="Principal">
+            <a href="#">home</a>
+            <a href="#" class="is-active" aria-current="page">sessões</a>
+            <a href="#">galeria</a>
+            <a href="#">sobre</a>
+            <a href="#">contato</a>
+          </nav>
+        </div>
+      </header>
+      <div class="page-stub">
+        <h2>Individuais ou em grupos de até 4 pessoas</h2>
+        <p>Conteúdo da página (stub) — o foco é o menu.</p>
+      </div>
+    </div>
+
+    <div class="mobile-block">
+      <div class="mobile-frame">
+        <div class="frame-label">Mobile — menu aberto</div>
+        <header class="preview-header">
+          <div class="wrap">
+            <img class="logo-img" src="../logo-site.png" alt="Sal na Lente" />
+            <button class="burger" type="button" aria-label="Menu" aria-expanded="true">
+              <span></span><span></span><span></span>
+            </button>
+          </div>
+        </header>
+        <nav class="nav-mob v3-nav-mob" aria-label="Menu mobile">
+          <a href="#">home</a>
+          <a href="#" class="is-active" aria-current="page">sessões</a>
+          <a href="#">galeria</a>
+          <a href="#">sobre</a>
+          <a href="#">contato</a>
+        </nav>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    function show(id, el) {
+      document.querySelectorAll('.variant').forEach((v) => v.classList.remove('active'));
+      document.querySelector('.' + id).classList.add('active');
+      document.querySelectorAll('.tab').forEach((t) => t.classList.remove('active'));
+      el.classList.add('active');
+    }
+  </script>
+</body>
+</html>

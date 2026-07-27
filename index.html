@@ -15,7 +15,7 @@
       </a>
 
       <nav class="nav-desktop" aria-label="Principal">
-        <a href="index.html">home</a>
+        <a href="index.html" aria-current="page">home</a>
         <a href="sessoes.html">sessões</a>
         <a href="galeria.html">galeria</a>
         <a href="sobre.html">sobre</a>
@@ -37,7 +37,7 @@
     </div>
 
     <nav class="nav-mobile" id="navMobile" aria-label="Menu mobile" hidden>
-      <a href="index.html">home</a>
+      <a href="index.html" aria-current="page">home</a>
       <a href="sessoes.html">sessões</a>
       <a href="galeria.html">galeria</a>
       <a href="sobre.html">sobre</a>
@@ -93,6 +93,20 @@
     </div>
   </footer>
 
+  <div
+    class="lightbox"
+    id="lightbox"
+    hidden
+    role="dialog"
+    aria-modal="true"
+    aria-label="Foto ampliada"
+  >
+    <button type="button" class="lightbox-close" id="lightboxClose" aria-label="Fechar">
+      &times;
+    </button>
+    <img id="lightboxImg" src="" alt="" />
+  </div>
+
   <script>
     const FOTOS_PAGE = 'home';
     const INSTAGRAM = 'https://instagram.com/salnalente';
@@ -132,6 +146,44 @@
       link.addEventListener('click', closeMenu);
     });
 
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(src) {
+      lightboxImg.src = src;
+      lightbox.hidden = false;
+      requestAnimationFrame(() => lightbox.classList.add('open'));
+      document.body.classList.add('lightbox-open');
+      lightboxClose.focus();
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('open');
+      document.body.classList.remove('lightbox-open');
+      const onEnd = () => {
+        lightbox.hidden = true;
+        lightboxImg.removeAttribute('src');
+        lightbox.removeEventListener('transitionend', onEnd);
+      };
+      lightbox.addEventListener('transitionend', onEnd);
+    }
+
+    lightboxClose.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeLightbox();
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+        closeLightbox();
+      }
+    });
+
     const gallery = document.getElementById('gallery');
     fetch(`${FOTOS_PAGE}/fotos.json`)
       .then((r) => {
@@ -143,16 +195,29 @@
         const first = 'home_DSC0146.jpg';
         const ordered = [first, ...files.filter((f) => f !== first)];
         ordered.forEach((file) => {
+          const src = `${FOTOS_PAGE}/fotos/${file}`;
           const item = document.createElement('div');
           item.className = 'photo';
-          item.innerHTML = `<img src="${FOTOS_PAGE}/fotos/${file}" alt="" draggable="false" loading="lazy" />`;
+          item.setAttribute('role', 'button');
+          item.setAttribute('tabindex', '0');
+          item.setAttribute('aria-label', 'Ampliar foto');
+          item.innerHTML = `<img src="${src}" alt="" draggable="false" loading="lazy" />`;
+          item.addEventListener('click', () => openLightbox(src));
+          item.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              openLightbox(src);
+            }
+          });
           gallery.appendChild(item);
         });
       })
       .catch(() => {});
 
     document.addEventListener('contextmenu', (e) => {
-      if (e.target.closest('.gallery')) e.preventDefault();
+      if (e.target.closest('.gallery') || e.target.closest('.lightbox')) {
+        e.preventDefault();
+      }
     });
   </script>
 </body>
