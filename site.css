@@ -309,6 +309,10 @@ header.top .wrap-header {
   text-align: center;
 }
 
+.gallery-block:last-of-type {
+  margin-bottom: 24px;
+}
+
 .gallery-block .section-title {
   margin-top: 12px;
   margin-bottom: 18px;
