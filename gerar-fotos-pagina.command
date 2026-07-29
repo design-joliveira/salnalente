@@ -7,12 +7,12 @@
 
 cd "$(dirname "$0")"
 
-PAGES="home sessoes galeria sobre galeria/surf galeria/beach-vibes galeria/quadros"
+PAGES="home sessoes galeria sobre galeria/surf galeria/vibes galeria/quadros"
 
 if [ -n "$1" ]; then
   PAGE="$1"
 else
-  echo "Qual página? (home / sessoes / galeria / sobre / galeria/surf / galeria/beach-vibes / galeria/quadros)"
+  echo "Qual página? (home / sessoes / galeria / sobre / galeria/surf / galeria/vibes / galeria/quadros)"
   read PAGE
 fi
 
