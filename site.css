@@ -236,6 +236,10 @@ header.top .wrap-header {
   margin-right: auto;
 }
 
+.section-body--after-gallery {
+  padding-bottom: 6px;
+}
+
 .contact-wa {
   margin-top: 1.5rem;
 }
@@ -300,6 +304,10 @@ header.top .wrap-header {
 .gallery-section {
   padding-top: 0;
   border-top: none;
+}
+
+.gallery-section--home {
+  padding-bottom: 12px;
 }
 
 .gallery-block {
