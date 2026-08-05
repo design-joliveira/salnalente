@@ -3,16 +3,16 @@
 # Gera $PAGINA/fotos.json a partir das imagens em $PAGINA/fotos/
 # Uso: ./gerar-fotos-pagina.command
 #      ./gerar-fotos-pagina.command sessoes
-#      ./gerar-fotos-pagina.command galeria/surf
+#      ./gerar-fotos-pagina.command galeria
 
 cd "$(dirname "$0")"
 
-PAGES="home sessoes galeria sobre galeria/surf galeria/vibes galeria/quadros"
+PAGES="home sessoes galeria sobre"
 
 if [ -n "$1" ]; then
   PAGE="$1"
 else
-  echo "Qual página? (home / sessoes / galeria / sobre / galeria/surf / galeria/vibes / galeria/quadros)"
+  echo "Qual página? (home / sessoes / galeria / sobre)"
   read PAGE
 fi
 

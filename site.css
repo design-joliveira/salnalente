@@ -350,6 +350,23 @@ header.top .wrap-header {
   }
 }
 
+.gallery--masonry {
+  display: block;
+  column-count: 1;
+  column-gap: 16px;
+}
+
+@media (min-width: 600px) {
+  .gallery--masonry {
+    column-count: 2;
+  }
+}
+
+.gallery--masonry .photo {
+  break-inside: avoid;
+  margin-bottom: 16px;
+}
+
 .gallery .photo {
   position: relative;
   overflow: hidden;

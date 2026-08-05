@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Experimento — Galeria com fotos 9:16</title>
+  <link rel="stylesheet" href="../site.css" />
+  <style>
+    body { padding-bottom: 4rem; }
+
+    .exp-intro {
+      max-width: var(--content);
+      margin: 0 auto;
+      padding: 1.5rem var(--pad-x) 0.5rem;
+    }
+
+    .exp-intro h1 {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(1.62rem, 3.36vw, 2.1rem);
+      font-weight: 400;
+      color: var(--salt);
+      margin-bottom: 0.5rem;
+    }
+
+    .exp-intro p {
+      color: var(--salt);
+      font-size: 0.9rem;
+      line-height: 1.55;
+      max-width: 36rem;
+    }
+
+    .exp-variant {
+      border-top: 1px solid var(--line);
+      padding: 2rem 0 2.5rem;
+    }
+
+    .exp-variant .wrap { text-align: left; }
+
+    .exp-label {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.4rem;
+    }
+
+    .exp-name {
+      font-family: 'Caveat', cursive;
+      font-size: 1.5rem;
+      color: var(--ink);
+      margin-bottom: 0.35rem;
+    }
+
+    .exp-desc {
+      color: var(--salt);
+      font-size: 0.875rem;
+      line-height: 1.55;
+      margin-bottom: 1.25rem;
+      max-width: 36rem;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      padding: 0.15rem 0.4rem;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Fotos verticais simuladas (crop 9:16) */
+    .photo--vertical img {
+      aspect-ratio: 9 / 16;
+      object-fit: cover;
+      width: 100%;
+      height: auto;
+    }
+
+    /* ── A: atual (altura natural / uneven) ── */
+    .gallery-a {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 600px) {
+      .gallery-a { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── B: células iguais, object-fit cover ── */
+    .gallery-b {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 600px) {
+      .gallery-b { grid-template-columns: 1fr 1fr; }
+    }
+    .gallery-b .photo {
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+    }
+    .gallery-b .photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      aspect-ratio: auto;
+    }
+
+    /* ── C: vertical ocupa 2 linhas (row-span) ── */
+    .gallery-c {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      grid-auto-flow: dense;
+    }
+    @media (min-width: 600px) {
+      .gallery-c {
+        grid-template-columns: 1fr 1fr;
+        grid-auto-rows: minmax(140px, auto);
+      }
+      .gallery-c .photo--vertical {
+        grid-row: span 2;
+      }
+      .gallery-c .photo {
+        height: 100%;
+      }
+      .gallery-c .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        aspect-ratio: auto;
+      }
+      .gallery-c .photo:not(.photo--vertical) img {
+        aspect-ratio: 3 / 2;
+        height: auto;
+      }
+      .gallery-c .photo--vertical img {
+        aspect-ratio: auto;
+        min-height: 100%;
+      }
+    }
+
+    /* ── D: masonry via columns ── */
+    .gallery-d {
+      column-count: 1;
+      column-gap: 16px;
+    }
+    @media (min-width: 600px) {
+      .gallery-d { column-count: 2; }
+    }
+    .gallery-d .photo {
+      break-inside: avoid;
+      margin-bottom: 16px;
+    }
+    .gallery-d .photo img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ── E: pares — vertical + paisagem lado a lado com altura alinhada ── */
+    .gallery-e {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 600px) {
+      .gallery-e {
+        grid-template-columns: 9fr 16fr;
+        align-items: stretch;
+      }
+      .gallery-e .pair {
+        display: contents;
+      }
+      .gallery-e .photo {
+        height: 100%;
+      }
+      .gallery-e .photo img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        aspect-ratio: auto;
+      }
+      .gallery-e .photo--vertical img {
+        aspect-ratio: 9 / 16;
+        height: auto;
+      }
+      .gallery-e .photo:not(.photo--vertical) img {
+        aspect-ratio: auto;
+        height: 100%;
+        min-height: 100%;
+      }
+    }
+    .gallery-e .pair {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+    @media (min-width: 600px) {
+      .gallery-e .pair {
+        grid-template-columns: 9fr 16fr;
+        grid-column: 1 / -1;
+      }
+    }
+
+    .back {
+      display: inline-block;
+      margin: 1rem var(--pad-x) 0;
+      font-size: 0.85rem;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+
+  <a class="back" href="index.html">← Experimentos</a>
+
+  <div class="exp-intro">
+    <h1>Galeria com fotos 9:16</h1>
+    <p>
+      Como encaixar imagens verticais no grid atual (2 colunas).
+      As fotos marcadas com o badge “9:16” são crops simulados a partir das imagens da galeria.
+    </p>
+  </div>
+
+  <!-- A -->
+  <section class="exp-variant">
+    <div class="wrap">
+      <p class="exp-label">Variante A</p>
+      <h2 class="exp-name">Altura natural</h2>
+      <p class="exp-desc">
+        Comportamento próximo do atual: cada foto define a altura da célula.
+        Verticais ficam bem altas e desalinhadas na linha — funciona, mas o ritmo fica irregular.
+      </p>
+      <div class="gallery-a">
+        <div class="photo"><img src="../galeria/fotos/DJI_0242.jpg" alt="" loading="lazy" /></div>
+        <div class="photo photo--vertical">
+          <span class="badge">9:16</span>
+          <img src="../galeria/fotos/_DSC0181.jpg" alt="" loading="lazy" />
+        </div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0155.jpg" alt="" loading="lazy" /></div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0173.jpg" alt="" loading="lazy" /></div>
+        <div class="photo photo--vertical">
+          <span class="badge">9:16</span>
+          <img src="../galeria/fotos/_DSC0151.jpg" alt="" loading="lazy" />
+        </div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0383.jpg" alt="" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- B -->
+  <section class="exp-variant">
+    <div class="wrap">
+      <p class="exp-label">Variante B</p>
+      <h2 class="exp-name">Células iguais (crop 4:5)</h2>
+      <p class="exp-desc">
+        Todas as células têm a mesma proporção. Verticais e horizontais são cortadas com <code>object-fit: cover</code>.
+        Grid limpo e uniforme — perde um pouco das bordas da foto.
+      </p>
+      <div class="gallery-b">
+        <div class="photo"><img src="../galeria/fotos/DJI_0242.jpg" alt="" loading="lazy" /></div>
+        <div class="photo photo--vertical">
+          <span class="badge">9:16</span>
+          <img src="../galeria/fotos/_DSC0181.jpg" alt="" loading="lazy" />
+        </div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0155.jpg" alt="" loading="lazy" /></div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0173.jpg" alt="" loading="lazy" /></div>
+        <div class="photo photo--vertical">
+          <span class="badge">9:16</span>
+          <img src="../galeria/fotos/_DSC0151.jpg" alt="" loading="lazy" />
+        </div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0383.jpg" alt="" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- C -->
+  <section class="exp-variant">
+    <div class="wrap">
+      <p class="exp-label">Variante C</p>
+      <h2 class="exp-name">Vertical em 2 linhas (row-span)</h2>
+      <p class="exp-desc">
+        A foto 9:16 ocupa a altura de duas células. As paisagens ao lado se empilham.
+        Bom equilíbrio entre destacar o vertical e manter o grid organizado.
+      </p>
+      <div class="gallery-c">
+        <div class="photo photo--vertical">
+          <span class="badge">9:16</span>
+          <img src="../galeria/fotos/_DSC0181.jpg" alt="" loading="lazy" />
+        </div>
+        <div class="photo"><img src="../galeria/fotos/DJI_0242.jpg" alt="" loading="lazy" /></div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0155.jpg" alt="" loading="lazy" /></div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0173.jpg" alt="" loading="lazy" /></div>
+        <div class="photo photo--vertical">
+          <span class="badge">9:16</span>
+          <img src="../galeria/fotos/_DSC0151.jpg" alt="" loading="lazy" />
+        </div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0383.jpg" alt="" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- D -->
+  <section class="exp-variant">
+    <div class="wrap">
+      <p class="exp-label">Variante D</p>
+      <h2 class="exp-name">Masonry (CSS columns)</h2>
+      <p class="exp-desc">
+        Fluxo em colunas: cada foto mantém a proporção real e o layout se acomoda sozinho.
+        Visual de portfólio clássico — a ordem de leitura sobe/desce por coluna, não linha a linha.
+      </p>
+      <div class="gallery-d">
+        <div class="photo"><img src="../galeria/fotos/DJI_0242.jpg" alt="" loading="lazy" /></div>
+        <div class="photo photo--vertical">
+          <span class="badge">9:16</span>
+          <img src="../galeria/fotos/_DSC0181.jpg" alt="" loading="lazy" />
+        </div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0155.jpg" alt="" loading="lazy" /></div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0173.jpg" alt="" loading="lazy" /></div>
+        <div class="photo photo--vertical">
+          <span class="badge">9:16</span>
+          <img src="../galeria/fotos/_DSC0151.jpg" alt="" loading="lazy" />
+        </div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0383.jpg" alt="" loading="lazy" /></div>
+        <div class="photo"><img src="../galeria/fotos/_DSC0529.jpg" alt="" loading="lazy" /></div>
+        <div class="photo"><img src="../galeria/fotos/DJI_0248.jpg" alt="" loading="lazy" /></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- E -->
+  <section class="exp-variant">
+    <div class="wrap">
+      <p class="exp-label">Variante E</p>
+      <h2 class="exp-name">Par vertical + paisagem</h2>
+      <p class="exp-desc">
+        Cada “par” junta uma 9:16 com uma paisagem na mesma altura (proporção ~9+16).
+        Exige ordenar as fotos em pares; o vertical ganha destaque sem quebrar o alinhamento.
+      </p>
+      <div class="gallery-e">
+        <div class="pair">
+          <div class="photo photo--vertical">
+            <span class="badge">9:16</span>
+            <img src="../galeria/fotos/_DSC0181.jpg" alt="" loading="lazy" />
+          </div>
+          <div class="photo"><img src="../galeria/fotos/DJI_0242.jpg" alt="" loading="lazy" /></div>
+        </div>
+        <div class="pair">
+          <div class="photo photo--vertical">
+            <span class="badge">9:16</span>
+            <img src="../galeria/fotos/_DSC0151.jpg" alt="" loading="lazy" />
+          </div>
+          <div class="photo"><img src="../galeria/fotos/_DSC0173.jpg" alt="" loading="lazy" /></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>
