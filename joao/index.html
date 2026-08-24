@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sal na Lente</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,700;1,400&display=swap');
+
+    :root {
+      --ocean: #000000;
+      --foam: #ffffff;
+      --salt: #6b7f8a;
+      --accent: #e8c87a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--ocean);
+      color: var(--foam);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      justify-content: center;
+    }
+
+    .logo-img {
+  height: 100px;
+  width: auto;
+}
+
+@media (min-width: 768px) {
+  .logo-img {
+    height: 160px;
+  }
+}
+
+    .instruction {
+      padding: 1rem 1.5rem;
+      background: rgba(255,255,255,0.04);
+      border-left: 3px solid var(--accent);
+      margin: 1rem 0;
+      font-size: 0.875rem;
+      color: var(--salt);
+      line-height: 1.6;
+    }
+
+    .instruction strong {
+      color: var(--foam);
+      display: block;
+      margin-bottom: 0.2rem;
+    }
+
+    .gallery {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      padding: 0 32px 12rem;
+      align-items: center;
+    }
+
+    .photo-item {
+      position: relative;
+      width: 100%;
+      cursor: pointer;
+      overflow: hidden;
+      isolation: isolate;
+    }
+
+    @media (min-width: 768px) {
+      .gallery {
+        padding: 0 0 12rem;;
+      }
+      .photo-item {
+        width: 50%;
+      }
+    }
+
+    .photo-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      filter: brightness(0.92);
+      pointer-events: none;
+      user-select: none;
+      -webkit-user-drag: none;
+      transition: filter 0.2s ease;
+    }
+
+    .photo-item:hover img {
+      filter: brightness(1);
+    }
+
+    .photo-item.selected img {
+      filter: brightness(0.55);
+    }
+
+    .photo-item.selected::after {
+      content: '✓';
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 5rem;
+      color: #fff;
+      font-weight: 700;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .photo-item::before {
+      content: '';
+      position: absolute;
+      inset: -40%;
+      z-index: 2;
+      pointer-events: none;
+      transform: rotate(-28deg);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='90'%3E%3Ctext x='0' y='55' font-family='Georgia, serif' font-size='22' font-weight='700' fill='rgba(0,0,0,0.38)' stroke='rgba(255,255,255,0.22)' stroke-width='0.6' letter-spacing='6'%3ESAL NA LENTE%3C/text%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 280px 90px;
+    }
+
+.sticky-bar {
+  position: sticky;
+  bottom: 0;
+  background: var(--ocean);
+  border-top: 1px solid rgba(255,255,255,0.1);
+  padding: 1rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 4px;
+}
+
+@media (min-width: 768px) {
+  .sticky-bar {
+    max-width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+    .selection-summary {
+      font-size: 0.85rem;
+      color: var(--salt);
+    }
+
+    .selection-count {
+      font-weight: 600;
+      color: var(--foam);
+    }
+
+    .selected-list {
+      font-size: 0.75rem;
+      color: var(--accent);
+      min-height: 1.2em;
+      word-break: break-all;
+    }
+
+    .price-summary {
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+
+    .price-original {
+      color: var(--salt);
+      text-decoration: line-through;
+    }
+
+    .price-discount-label {
+      color: var(--accent);
+      font-size: 0.75rem;
+      margin-left: 0.4rem;
+    }
+
+    .price-final {
+      color: var(--foam);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .btn-whatsapp {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: #25d366;
+      color: #fff;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.85rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background 0.2s;
+      width: 100%;
+    }
+
+    .btn-whatsapp:hover { background: #1ebe5d; }
+
+    .btn-whatsapp svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    .no-selection-hint {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--salt);
+    }
+
+    footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      font-size: 0.75rem;
+      color: rgba(107,127,138,0.4);
+      letter-spacing: 0.05em;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="../logo.png" alt="Sal na Lente" class="logo-img" />
+</header>
+
+<div class="instruction">
+  <strong>Como escolher suas fotos</strong>
+  Toque em cada foto que quiser. Quando terminar, clique em "Enviar seleção" — eu recebo a lista direto no WhatsApp e te mando as fotos em alta resolução após o pagamento.
+</div>
+
+<div class="gallery" id="gallery"></div>
+
+<div class="sticky-bar">
+  <div class="selection-summary" id="selectionSummary" style="display: none;">
+    <span><span class="selection-count" id="count">0</span> <span id="selectionLabel">fotos selecionadas</span></span>
+  </div>
+  <div class="selected-list" id="selectedList">Nenhuma foto selecionada ainda</div>
+  <div class="price-summary" id="priceSummary"></div>
+  <a class="btn-whatsapp" id="btnWhatsapp" href="#" target="_blank">
+    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+    </svg>
+    Enviar seleção
+  </a>
+  <p class="no-selection-hint" id="hint">Selecione ao menos uma foto para continuar</p>
+</div>
+
+<footer>salnalente.com.br</footer>
+
+<script>
+  // ─── CONFIGURAÇÃO ─────────────────────────────────────────
+  const WHATSAPP_NUMBER = '5521999485532'; // ← seu número com DDI+DDD, sem espaços
+  // ──────────────────────────────────────────────────────────
+
+  const gallery = document.getElementById('gallery');
+  const countEl = document.getElementById('count');
+  const selectionSummary = document.getElementById('selectionSummary');
+  const selectionLabel = document.getElementById('selectionLabel');
+  const listEl  = document.getElementById('selectedList');
+  const btnWhatsapp = document.getElementById('btnWhatsapp');
+  const hint = document.getElementById('hint');
+
+  let selected = new Set();
+
+  // Carrega a lista de fotos do arquivo fotos.json
+  fetch('fotos.json')
+    .then(r => r.json())
+    .then(photos => {
+      photos.forEach((file) => {
+        const item = document.createElement('div');
+        item.className = 'photo-item';
+        item.innerHTML = `<img src="fotos/${file}" alt="${file}" draggable="false" />`;
+        item.addEventListener('click', () => toggle(item, file));
+        gallery.appendChild(item);
+      });
+    })
+    .catch(() => {
+      gallery.innerHTML = '<p style="padding:2rem;color:var(--salt)">Nenhuma foto encontrada.</p>';
+    });
+
+  function toggle(item, file) {
+    if (selected.has(file)) {
+      selected.delete(file);
+      item.classList.remove('selected');
+    } else {
+      selected.add(file);
+      item.classList.add('selected');
+    }
+    update();
+  }
+
+  // ─── PREÇOS ───────────────────────────────────────────────
+  const PRECO_UNITARIO = 120;
+  const DESCONTOS = [
+    { minFotos: 10, desconto: 0.20 },
+    { minFotos: 5, desconto: 0.10 },
+  ];
+  // ──────────────────────────────────────────────────────────
+
+  const priceSummary = document.getElementById('priceSummary');
+
+  function calcDesconto(count) {
+    for (const d of DESCONTOS) {
+      if (count >= d.minFotos) return d.desconto;
+    }
+    return 0;
+  }
+
+  function formatBRL(value) {
+    return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  }
+
+  function update() {
+    const count = selected.size;
+    countEl.textContent = count;
+    selectionLabel.textContent = count === 1 ? 'foto selecionada' : 'fotos selecionadas';
+
+    if (count === 0) {
+      selectionSummary.style.display = 'none';
+      listEl.textContent = 'Nenhuma foto selecionada ainda';
+      priceSummary.innerHTML = '';
+      btnWhatsapp.setAttribute('href', '#');
+      hint.style.display = 'block';
+    } else {
+      selectionSummary.style.display = 'block';
+      const files = [...selected].sort().join(', ');
+      listEl.textContent = files;
+      hint.style.display = 'none';
+
+      const total = count * PRECO_UNITARIO;
+      const desconto = calcDesconto(count);
+      const totalComDesconto = total * (1 - desconto);
+
+      if (desconto > 0) {
+        const pct = Math.round(desconto * 100);
+        priceSummary.innerHTML = `
+          <div><span class="price-original">${formatBRL(total)}</span><span class="price-discount-label">${pct}% de desconto</span></div>
+          <div class="price-final">${formatBRL(totalComDesconto)}</div>
+        `;
+      } else {
+        priceSummary.innerHTML = `<div class="price-final">${formatBRL(total)}</div>`;
+      }
+
+      const msg = `Fotos selecionadas:\n${[...selected].sort().join('\n')}\n\nTotal de fotos selecionadas: ${count}\nPreço: ${formatBRL(totalComDesconto)}\n------------------------------------------\nPix: 21999485532\n(Celular) José Luis Oliveira`;
+      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
+      btnWhatsapp.setAttribute('href', url);
+    }
+  }
+
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  document.addEventListener('keydown', e => {
+    if ((e.ctrlKey || e.metaKey) && ['s','S','u','U'].includes(e.key)) e.preventDefault();
+  });
+</script>
+
+</body>
+</html>
